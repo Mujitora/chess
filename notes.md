@@ -1,0 +1,1 @@
+this is the notes file that im gonna save and put into git
