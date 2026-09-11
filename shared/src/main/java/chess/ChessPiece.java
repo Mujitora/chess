@@ -103,7 +103,21 @@ public class ChessPiece {
                         if (currentRow > 8 || currentCol > 8 || currentRow < 1 || currentCol < 1) {
                             break;
                         }else {
-                            validMoves.add(new ChessMove(myPosition, new ChessPosition(currentRow, currentCol), null));
+                            ChessPiece currentPiece = board.getPiece(new ChessPosition(currentRow, currentCol));
+                            if (currentPiece == null) {
+                                validMoves.add(new ChessMove(myPosition, new ChessPosition(currentRow, currentCol), null));
+                            } else {
+                                if(currentPiece.getTeamColor().equals(this.getTeamColor())){
+                                    break;
+                                } else{
+                                    validMoves.add(new ChessMove(myPosition, new ChessPosition(currentRow, currentCol), null));
+                                }
+
+                            }
+
+
+
+
 
                         }
 
