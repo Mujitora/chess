@@ -2,6 +2,7 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * Represents a single chess piece
@@ -18,6 +19,28 @@ public class ChessPiece {
         this.pieceType = type;
         this.pieceColor = pieceColor;
 
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ChessPiece that = (ChessPiece) o;
+        return pieceColor == that.pieceColor && pieceType == that.pieceType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pieceColor, pieceType);
+    }
+
+    @Override
+    public String toString() {
+        return "ChessPiece{" +
+                "pieceColor=" + pieceColor +
+                ", pieceType=" + pieceType +
+                '}';
     }
 
     /**
@@ -57,6 +80,43 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> validMoves = new ArrayList<>();
 
+        switch (getPieceType()){
+            case KING:
+                break;
+            case PAWN:
+                break;
+            case ROOK:
+                break;
+            case QUEEN:
+                break;
+            case BISHOP:
+                int[][] moveableDirections = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+                for (int[] direction : moveableDirections) {
+                    int rowMove = direction[0];
+                    int colMove = direction[1];
+                    int currentRow = myPosition.getRow();
+                    int currentCol = myPosition.getColumn();
+
+                    while (true) {
+                        currentRow += rowMove;
+                        currentCol += colMove;
+                        if (currentRow > 8 || currentCol > 8 || currentRow < 1 || currentCol < 1) {
+                            break;
+                        }else {
+                            validMoves.add(new ChessMove(myPosition, new ChessPosition(currentRow, currentCol), null));
+
+                        }
+
+
+                    }
+                }
+
+                break;
+            case KNIGHT:
+                break;
+            default:
+                System.out.println("an invalid piece type was passed by get piece type");
+        }
 
         return validMoves;
     }
