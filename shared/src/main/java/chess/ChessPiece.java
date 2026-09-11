@@ -82,16 +82,44 @@ public class ChessPiece {
 
         switch (getPieceType()){
             case KING:
+                int[][] kingMoveableDirections = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1},{1,0},{0,1},{0,-1},{-1,0}};
+                for (int[] direction : kingMoveableDirections) {
+                    int rowMove = direction[0];
+                    int colMove = direction[1];
+                    int currentRow = myPosition.getRow();
+                    int currentCol = myPosition.getColumn();
+
+                    while (true) {
+                        currentRow += rowMove;
+                        currentCol += colMove;
+                        if (currentRow > 8 || currentCol > 8 || currentRow < 1 || currentCol < 1) {
+                            break;
+                        }else {
+                            ChessPiece currentPiece = board.getPiece(new ChessPosition(currentRow, currentCol));
+                            if (currentPiece == null) {
+                                validMoves.add(new ChessMove(myPosition, new ChessPosition(currentRow, currentCol), null));
+                                break;
+                            } else {
+                                if(currentPiece.getTeamColor().equals(this.getTeamColor())){
+                                    break;
+                                } else{
+                                    validMoves.add(new ChessMove(myPosition, new ChessPosition(currentRow, currentCol), null));
+                                    break;
+                                }
+
+                            }
+
+                        }
+
+                    }
+                }
                 break;
             case PAWN:
+                //got some wierd movment with the diagonly attacking so ill wait on this one
                 break;
             case ROOK:
-                break;
-            case QUEEN:
-                break;
-            case BISHOP:
-                int[][] moveableDirections = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
-                for (int[] direction : moveableDirections) {
+                int[][] rookMoveableDirections = {{1,0},{0,1},{0,-1},{-1,0}};
+                for (int[] direction : rookMoveableDirections) {
                     int rowMove = direction[0];
                     int colMove = direction[1];
                     int currentRow = myPosition.getRow();
@@ -116,12 +144,41 @@ public class ChessPiece {
 
                             }
 
-
-
-
-
                         }
 
+                    }
+                }
+                break;
+            case QUEEN:
+                break;
+            case BISHOP:
+                int[][] bishopMoveableDirections = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+                for (int[] direction : bishopMoveableDirections) {
+                    int rowMove = direction[0];
+                    int colMove = direction[1];
+                    int currentRow = myPosition.getRow();
+                    int currentCol = myPosition.getColumn();
+
+                    while (true) {
+                        currentRow += rowMove;
+                        currentCol += colMove;
+                        if (currentRow > 8 || currentCol > 8 || currentRow < 1 || currentCol < 1) {
+                            break;
+                        }else {
+                            ChessPiece currentPiece = board.getPiece(new ChessPosition(currentRow, currentCol));
+                            if (currentPiece == null) {
+                                validMoves.add(new ChessMove(myPosition, new ChessPosition(currentRow, currentCol), null));
+                            } else {
+                                if(currentPiece.getTeamColor().equals(this.getTeamColor())){
+                                    break;
+                                } else{
+                                    validMoves.add(new ChessMove(myPosition, new ChessPosition(currentRow, currentCol), null));
+                                    break;
+                                }
+
+                            }
+
+                        }
 
                     }
                 }
