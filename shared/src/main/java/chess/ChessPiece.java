@@ -111,6 +111,7 @@ public class ChessPiece {
                                     break;
                                 } else{
                                     validMoves.add(new ChessMove(myPosition, new ChessPosition(currentRow, currentCol), null));
+                                    break;
                                 }
 
                             }
