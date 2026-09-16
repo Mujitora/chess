@@ -110,7 +110,6 @@ public class ChessPiece {
                             }
 
                         }
-
                     }
                 }
                 break;
@@ -123,10 +122,8 @@ public class ChessPiece {
                 } else {
                     move = -1;
                 }
-
                 int currentRow = myPosition.getRow();
                 int currentCol = myPosition.getColumn();
-
 
                 // ahead
                 int rowInFront = currentRow + move;
@@ -187,12 +184,6 @@ public class ChessPiece {
                         }
                     }
                 }
-
-
-
-
-
-
                 break;
         }
             case ROOK:
@@ -223,7 +214,6 @@ public class ChessPiece {
                             }
 
                         }
-
                     }
                 }
                 break;
@@ -251,11 +241,8 @@ public class ChessPiece {
                                     validMoves.add(new ChessMove(myPosition, new ChessPosition(currentRow, currentCol), null));
                                     break;
                                 }
-
                             }
-
                         }
-
                     }
                 }
                 break;
@@ -283,14 +270,11 @@ public class ChessPiece {
                                     validMoves.add(new ChessMove(myPosition, new ChessPosition(currentRow, currentCol), null));
                                     break;
                                 }
-
                             }
-
                         }
 
                     }
                 }
-
                 break;
 
             case KNIGHT:
@@ -320,9 +304,7 @@ public class ChessPiece {
                                 }
 
                             }
-
                         }
-
                     }
                 }
                 break;
