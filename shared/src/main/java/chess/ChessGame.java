@@ -1,6 +1,7 @@
 package chess;
 
 import javax.print.DocFlavor;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -50,7 +51,28 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        throw new RuntimeException("Not implemented");
+        ChessPiece currentPiece = board.getPiece(startPosition);
+        if(currentPiece == null){
+            return null;
+        }else {
+            Collection<ChessMove> validMoves = new ArrayList<>();
+            Collection<ChessMove> possibleMoves = currentPiece.pieceMoves(board, startPosition);
+            for( ChessMove move : possibleMoves){
+                ChessPiece startSquare = board.getPiece(move.getStartPosition());
+                ChessPiece endSquare = board.getPiece(move.getEndPosition());
+                //simulate the move
+                board.addPiece(startPosition, null);
+                board.addPiece(move.getEndPosition(), currentPiece);
+                //check if in check, if not add to validMoves
+                if (isInCheck(currentPiece.getTeamColor()) == false){
+                    validMoves.add(move);
+                }
+                //undo the move
+                board.addPiece(startPosition, currentPiece);
+                board.addPiece(move.getEndPosition(),endSquare);
+            }
+            return validMoves;
+        }
     }
 
     /**
@@ -69,7 +91,7 @@ public class ChessGame {
             for(int j = 1; j <= 8;j++){
                 ChessPiece possibleKing = board.getPiece(new ChessPosition(i,j));
                 if (possibleKing != null && possibleKing.getPieceType() == ChessPiece.PieceType.KING && possibleKing.getTeamColor().equals(kingColor)){
-                    //found the kind of the right color
+                    //found the king of the right color
                     ChessPosition kingPosition = new ChessPosition(i,j);
                     return kingPosition;
                 }
@@ -104,12 +126,9 @@ public class ChessGame {
                             if(enemyMove.getEndPosition().equals(kingPosition)){
                                 return true;
                             }
-
-
                         }
                     }
                 }
-
             }
         }
         return false;
