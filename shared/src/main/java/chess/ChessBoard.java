@@ -15,6 +15,7 @@ public class ChessBoard {
         board = new ChessPiece[8][8];
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) {
