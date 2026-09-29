@@ -121,6 +121,7 @@ public class ChessGame {
                     board.addPiece(move.getStartPosition(),null);
                     board.addPiece(move.getEndPosition(),  new ChessPiece(movingPiece.getTeamColor(), move.getPromotionPiece()));
                 }
+                //flip the turn to the other team
                 if (movingPiece.getTeamColor() == TeamColor.WHITE){
                     teamTurn = TeamColor.BLACK;
                 } else{
@@ -132,7 +133,7 @@ public class ChessGame {
 
     }
 
-    //** loop over every square and find where the relevant King is given the teamColor
+    // loop over every square and find where the relevant King is given the teamColor
     private ChessPosition getKingPosition(TeamColor kingColor){
         for(int i = 1;i <=8; i++ ){
             for(int j = 1; j <= 8;j++){
@@ -142,7 +143,6 @@ public class ChessGame {
                     ChessPosition kingPosition = new ChessPosition(i,j);
                     return kingPosition;
                 }
-
             }
         }
         return null;
@@ -198,7 +198,6 @@ public class ChessGame {
                             return false;
                         }
                     }
-
                 }
             }
         }
@@ -223,7 +222,6 @@ public class ChessGame {
                             return false;
                         }
                     }
-
                 }
             }
         }
