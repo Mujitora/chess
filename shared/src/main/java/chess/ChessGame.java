@@ -3,6 +3,7 @@ package chess;
 import javax.print.DocFlavor;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * A class that can manage a chess game, making moves on a board
@@ -17,6 +18,28 @@ public class ChessGame {
        this.board = new ChessBoard();
        board.resetBoard();
        this.teamTurn = TeamColor.WHITE;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ChessGame chessGame = (ChessGame) o;
+        return Objects.equals(board, chessGame.board) && teamTurn == chessGame.teamTurn;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(board, teamTurn);
+    }
+
+    @Override
+    public String toString() {
+        return "ChessGame{" +
+                "board=" + board +
+                ", teamTurn=" + teamTurn +
+                '}';
     }
 
     /**
@@ -82,7 +105,31 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        throw new RuntimeException("Not implemented");
+        if(board.getPiece(move.getStartPosition()) == null){
+            throw new InvalidMoveException("There is no piece in the starting square");
+        }
+        ChessPiece movingPiece = board.getPiece(move.getStartPosition());
+        if(!movingPiece.getTeamColor().equals(teamTurn)){
+            throw new InvalidMoveException("It is not your turn");
+        }
+        Collection<ChessMove> possibleValidMoves = validMoves(move.getStartPosition());
+            if(possibleValidMoves.contains(move)){
+                if(move.getPromotionPiece() == null){
+                    board.addPiece(move.getStartPosition(), null);
+                    board.addPiece(move.getEndPosition(), movingPiece);
+                }else{
+                    board.addPiece(move.getStartPosition(),null);
+                    board.addPiece(move.getEndPosition(),  new ChessPiece(movingPiece.getTeamColor(), move.getPromotionPiece()));
+                }
+                if (movingPiece.getTeamColor() == TeamColor.WHITE){
+                    teamTurn = TeamColor.BLACK;
+                } else{
+                    teamTurn = TeamColor.WHITE;
+                }
+        }else{
+                throw new InvalidMoveException("Not a valid move");
+            }
+
     }
 
     //** loop over every square and find where the relevant King is given the teamColor
