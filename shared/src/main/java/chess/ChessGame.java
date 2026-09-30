@@ -135,6 +135,7 @@ public class ChessGame {
 
     // loop over every square and find where the relevant King is given the teamColor
     private ChessPosition getKingPosition(TeamColor kingColor){
+        //for each row and each column
         for(int i = 1;i <=8; i++ ){
             for(int j = 1; j <= 8;j++){
                 ChessPiece possibleKing = board.getPiece(new ChessPosition(i,j));
@@ -156,12 +157,14 @@ public class ChessGame {
      */
     public boolean isInCheck(TeamColor teamColor) {
         TeamColor enemyTeam;
+        //make sure that it is checking the correct teams pieces
         if (teamColor == TeamColor.WHITE){
             enemyTeam = TeamColor.BLACK;
         } else{
             enemyTeam = TeamColor.WHITE;
         }
         ChessPosition kingPosition = getKingPosition(teamColor);
+        //loop through every piece one by one
         for(int i = 1;i <=8; i++ ) {
             for (int j = 1; j <= 8; j++) {
                 ChessPiece currentPiece = board.getPiece(new ChessPosition(i,j));
@@ -225,6 +228,7 @@ public class ChessGame {
                 }
             }
         }
+        //need to make sure it is not in check or else it would count as checkmate not stalemate
        if(isInCheck(teamColor)){
            return false;
         }else{
