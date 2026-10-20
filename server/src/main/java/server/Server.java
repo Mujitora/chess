@@ -2,8 +2,10 @@ package server;
 
 import dataaccess.*;
 import io.javalin.*;
-import service.ClearService;
+import model.UserData;
+import service.*;
 import com.google.gson.Gson;
+
 import java.util.Map;
 
 public class Server {
@@ -29,6 +31,22 @@ public class Server {
             ctx.status(500);
             ctx.result(new Gson().toJson(Map.of("message", "Error: " + e.getMessage())));
         });
+
+        UserService userService = new UserService(userDAO, authDAO);
+        javalin.post("/user", ctx->{
+           UserData userData = new Gson().fromJson(ctx.body(), UserData.class);
+           RegisterResult result = userService.register(userData);
+           ctx.result(new Gson().toJson(result));
+        });
+        javalin.exception(BadRequestException.class, (e, ctx)->{
+            ctx.status(400);
+            ctx.result(new Gson().toJson(Map.of("message", "Error: " + e.getMessage())));
+        });
+        javalin.exception(AlreadyTakenException.class, (e, ctx)->{
+            ctx.status(403);
+            ctx.result(new Gson().toJson(Map.of("message", "Error: " + e.getMessage())));
+        });
+
 
     }
 
