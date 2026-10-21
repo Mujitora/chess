@@ -47,6 +47,18 @@ public class Server {
             ctx.result(new Gson().toJson(Map.of("message", "Error: " + e.getMessage())));
         });
 
+        javalin.post("/session", ctx->{
+            LoginRequest loginRequest = new Gson().fromJson(ctx.body(), LoginRequest.class);
+            LoginResult result = userService.login(loginRequest);
+            ctx.result(new Gson().toJson(result));
+        });
+
+
+        javalin.exception(UnauthorizedException.class, (e, ctx)->{
+            ctx.status(401);
+            ctx.result(new Gson().toJson(Map.of("message", "Error: " + e.getMessage())));
+        });
+
 
     }
 
