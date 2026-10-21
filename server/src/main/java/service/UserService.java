@@ -29,7 +29,23 @@ public class UserService {
         AuthData userAuthData = new AuthData(token, userData.username());
         authDAO.createAuth(userAuthData);
         return new RegisterResult(userData.username(), token);
+    }
 
+    public LoginResult login(LoginRequest loginRequest) throws DataAccessException, BadRequestException, UnauthorizedException{
+        if(loginRequest == null || loginRequest.username() == null || loginRequest.password() == null){
+            throw new BadRequestException("bad request");
+        }
+        UserData user = userDAO.getUser(loginRequest.username());
+        if(user == null){
+            throw new UnauthorizedException("unauthorized");
+        }
+        if(!user.password().equals(loginRequest.password())){
+            throw new UnauthorizedException("unauthorized");
+        }
+        String token = UUID.randomUUID().toString();
+        AuthData userAuthData = new AuthData(token, loginRequest.username());
+        authDAO.createAuth(userAuthData);
+        return new LoginResult(loginRequest.username(), token);
     }
 
 }
