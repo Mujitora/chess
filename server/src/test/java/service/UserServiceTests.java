@@ -3,7 +3,6 @@ package service;
 import dataaccess.*;
 import model.UserData;
 import org.junit.jupiter.api.*;
-import server.Server;
 
 public class UserServiceTests {
     private UserDAO userDAO;
