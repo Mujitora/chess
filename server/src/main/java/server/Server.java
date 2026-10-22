@@ -2,7 +2,6 @@ package server;
 
 import dataaccess.*;
 import io.javalin.*;
-import model.GameData;
 import model.UserData;
 import service.*;
 import com.google.gson.Gson;
@@ -36,7 +35,7 @@ public class Server {
         UserService userService = new UserService(userDAO, authDAO);
         javalin.post("/user", ctx->{
            UserData userData = new Gson().fromJson(ctx.body(), UserData.class);
-           RegisterResult result = userService.register(userData);
+           AuthResult result = userService.register(userData);
            ctx.result(new Gson().toJson(result));
         });
         javalin.exception(BadRequestException.class, (e, ctx)->{
@@ -50,7 +49,7 @@ public class Server {
 
         javalin.post("/session", ctx->{
             LoginRequest loginRequest = new Gson().fromJson(ctx.body(), LoginRequest.class);
-            LoginResult result = userService.login(loginRequest);
+            AuthResult result = userService.login(loginRequest);
             ctx.result(new Gson().toJson(result));
         });
 

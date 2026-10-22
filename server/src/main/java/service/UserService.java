@@ -17,7 +17,7 @@ public class UserService {
         this.authDAO = authDAO;
     }
 
-    public RegisterResult register(UserData userData) throws DataAccessException, AlreadyTakenException, BadRequestException{
+    public AuthResult register(UserData userData) throws DataAccessException, AlreadyTakenException, BadRequestException{
         if (userData == null || userData.username() == null  || userData.password() == null || userData.email() == null || userData.username().isEmpty()  || userData.password().isEmpty() || userData.email().isEmpty() ) {
             throw new BadRequestException("bad request");
         }
@@ -28,10 +28,10 @@ public class UserService {
         String token = UUID.randomUUID().toString();
         AuthData userAuthData = new AuthData(token, userData.username());
         authDAO.createAuth(userAuthData);
-        return new RegisterResult(userData.username(), token);
+        return new AuthResult(userData.username(), token);
     }
 
-    public LoginResult login(LoginRequest loginRequest) throws DataAccessException, BadRequestException, UnauthorizedException{
+    public AuthResult login(LoginRequest loginRequest) throws DataAccessException, BadRequestException, UnauthorizedException{
         if(loginRequest == null || loginRequest.username() == null || loginRequest.password() == null){
             throw new BadRequestException("bad request");
         }
@@ -45,7 +45,7 @@ public class UserService {
         String token = UUID.randomUUID().toString();
         AuthData userAuthData = new AuthData(token, loginRequest.username());
         authDAO.createAuth(userAuthData);
-        return new LoginResult(loginRequest.username(), token);
+        return new AuthResult(loginRequest.username(), token);
     }
 
     public void logout(String authToken) throws DataAccessException, UnauthorizedException{
