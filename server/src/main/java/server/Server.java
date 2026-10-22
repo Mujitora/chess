@@ -65,6 +65,13 @@ public class Server {
             ctx.result("{}");
         });
 
+        GameService gameService = new GameService(authDAO, gameDAO);
+        javalin.get("/game", ctx->{
+            String token = ctx.header("authorization");
+            ListGamesResult result = gameService.listGames(token);
+            ctx.result(new Gson().toJson(result));
+        });
+
 
     }
 
