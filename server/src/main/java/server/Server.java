@@ -59,6 +59,12 @@ public class Server {
             ctx.result(new Gson().toJson(Map.of("message", "Error: " + e.getMessage())));
         });
 
+        javalin.delete("/session", ctx->{
+            String token = ctx.header("authorization");
+            userService.logout(token);
+            ctx.result("{}");
+        });
+
 
     }
 
