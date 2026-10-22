@@ -2,6 +2,7 @@ package server;
 
 import dataaccess.*;
 import io.javalin.*;
+import model.GameData;
 import model.UserData;
 import service.*;
 import com.google.gson.Gson;
@@ -71,6 +72,22 @@ public class Server {
             ListGamesResult result = gameService.listGames(token);
             ctx.result(new Gson().toJson(result));
         });
+
+        javalin.post("/game", ctx ->{
+            String token = ctx.header("authorization");
+            CreateGameRequest gameData = new Gson().fromJson(ctx.body(), CreateGameRequest.class);
+            CreateGameResult result = gameService.createGame(token, gameData);
+            ctx.result(new Gson().toJson(result));
+        });
+
+        javalin.put("/game", ctx ->{
+            String token = ctx.header("authorization");
+            JoinGameRequest request = new Gson().fromJson(ctx.body(), JoinGameRequest.class);
+            gameService.joinGame(token, request);
+            ctx.result("{}");
+
+        });
+
 
 
     }
