@@ -1,5 +1,9 @@
 package dataaccess.sql;
 
+import dataaccess.DataAccessException;
+import dataaccess.DatabaseManager;
+import java.sql.SQLException;
+
 public class DatabaseSetup {
     private static final String[] createStatements = {
             """
@@ -29,4 +33,16 @@ public class DatabaseSetup {
             """
     };
 
+    public static void createTable() throws DataAccessException {
+        DatabaseManager.createDatabase();
+        try (var connection = DatabaseManager.getConnection()){
+            for (var statement : createStatements){
+                try (var preparedStatement = connection.prepareStatement(statement)){
+                    preparedStatement.executeUpdate();
+                }
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException("could not create tables: "+ e.getMessage());
+        }
+    }
 }
