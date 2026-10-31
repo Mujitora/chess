@@ -1,6 +1,9 @@
 package server;
 
 import dataaccess.*;
+import dataaccess.sql.DatabaseSetup;
+import dataaccess.sql.SQLAuthDAO;
+import dataaccess.sql.SQLUserDAO;
 import io.javalin.*;
 import model.UserData;
 import service.*;
@@ -18,9 +21,9 @@ public class Server {
     public Server() {
         javalin = Javalin.create(config -> config.staticFiles.add("web"));
 
-        userDAO = new MemoryUserDAO();
+        userDAO = new SQLUserDAO();
         gameDAO = new MemoryGameDAO();
-        authDAO = new MemoryAuthDAO();
+        authDAO = new SQLAuthDAO();
         ClearService clearService = new ClearService(userDAO, gameDAO, authDAO);
         // Register your endpoints and exception handlers here.
         javalin.delete("/db", ctx->{
