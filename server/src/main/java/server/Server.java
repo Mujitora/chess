@@ -21,6 +21,12 @@ public class Server {
     public Server() {
         javalin = Javalin.create(config -> config.staticFiles.add("web"));
 
+        try {
+            DatabaseSetup.createTable();
+        } catch (DataAccessException e) {
+            throw new RuntimeException("could not set up the database: " + e.getMessage());
+        }
+
         userDAO = new SQLUserDAO();
         gameDAO = new MemoryGameDAO();
         authDAO = new SQLAuthDAO();
