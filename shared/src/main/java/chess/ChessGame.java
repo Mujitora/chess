@@ -139,7 +139,8 @@ public class ChessGame {
         for(int i = 1;i <=8; i++ ){
             for(int j = 1; j <= 8;j++){
                 ChessPiece possibleKing = board.getPiece(new ChessPosition(i,j));
-                if (possibleKing != null && possibleKing.getPieceType() == ChessPiece.PieceType.KING && possibleKing.getTeamColor().equals(kingColor)){
+                if (possibleKing != null && possibleKing.getPieceType() == ChessPiece.PieceType.KING &&
+                        possibleKing.getTeamColor().equals(kingColor)){
                     //found the king of the right color
                     ChessPosition kingPosition = new ChessPosition(i,j);
                     return kingPosition;

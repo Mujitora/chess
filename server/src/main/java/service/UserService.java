@@ -19,7 +19,8 @@ public class UserService {
     }
 
     public AuthResult register(UserData userData) throws DataAccessException, AlreadyTakenException, BadRequestException{
-        if (userData == null || userData.username() == null  || userData.password() == null || userData.email() == null || userData.username().isEmpty()  || userData.password().isEmpty() || userData.email().isEmpty() ) {
+        if (userData == null || userData.username() == null  || userData.password() == null || userData.email() == null ||
+                userData.username().isEmpty()  || userData.password().isEmpty() || userData.email().isEmpty() ) {
             throw new BadRequestException("bad request");
         }
         if (userDAO.getUser(userData.username()) != null){

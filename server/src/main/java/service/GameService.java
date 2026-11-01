@@ -32,7 +32,8 @@ public class GameService {
         return new ListGamesResult(newGames);
     }
 
-    public CreateGameResult createGame(String authToken, CreateGameRequest request) throws UnauthorizedException, DataAccessException, BadRequestException{
+    public CreateGameResult createGame(String authToken, CreateGameRequest request) throws
+            UnauthorizedException, DataAccessException, BadRequestException{
         if (authDAO.getAuth(authToken) == null){
             throw new UnauthorizedException("unauthorized");
         }
@@ -44,7 +45,8 @@ public class GameService {
         return new CreateGameResult(gameID);
     }
 
-    public void joinGame(String authToken, JoinGameRequest request) throws  BadRequestException, DataAccessException, UnauthorizedException, AlreadyTakenException{
+    public void joinGame(String authToken, JoinGameRequest request) throws
+            BadRequestException, DataAccessException, UnauthorizedException, AlreadyTakenException{
         AuthData authData = authDAO.getAuth(authToken);
         if (authData == null){
             throw new UnauthorizedException("unauthorized");
@@ -69,10 +71,12 @@ public class GameService {
 
         GameData updatedGame;
         if (request.playerColor().equals("WHITE")){
-            updatedGame = new GameData(request.gameID(), authData.username() , joiningGame.blackUsername(), joiningGame.gameName(), joiningGame.game());
+            updatedGame = new GameData(request.gameID(), authData.username() ,
+                    joiningGame.blackUsername(), joiningGame.gameName(), joiningGame.game());
         }
         else {
-            updatedGame = new GameData(request.gameID(), joiningGame.whiteUsername(), authData.username(), joiningGame.gameName(), joiningGame.game());
+            updatedGame = new GameData(request.gameID(), joiningGame.whiteUsername(),
+                    authData.username(), joiningGame.gameName(), joiningGame.game());
         }
         gameDAO.updateGame(updatedGame);
 

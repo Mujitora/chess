@@ -26,7 +26,7 @@ public class ClearServiceTests {
     }
 
     @Test
-    public void ClearTest() throws Exception{
+    public void clearTest() throws Exception{
         userDAO.createUser(new UserData("marshall", "password", "mhawk@byu.edu"));
         gameDAO.createGameData(new GameData(101, "bob", "joe", "test game", new ChessGame()));
         authDAO.createAuth(new AuthData("321", "bob"));

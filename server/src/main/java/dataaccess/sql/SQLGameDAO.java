@@ -19,7 +19,9 @@ public class SQLGameDAO implements GameDAO {
     public int createGameData(GameData gameData) throws DataAccessException {
         String json = new Gson().toJson(gameData.game());
         try (var connection = DatabaseManager.getConnection()) {
-            try (var preparedStatement = connection.prepareStatement("INSERT INTO game (whiteUsername, blackUsername,gameName,game) VALUES(?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+            try (var preparedStatement = connection.prepareStatement
+                    ("INSERT INTO game (whiteUsername, blackUsername,gameName,game) " +
+                            "VALUES(?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
                 preparedStatement.setString(1, gameData.whiteUsername());
                 preparedStatement.setString(2, gameData.blackUsername());
                 preparedStatement.setString(3, gameData.gameName());
@@ -41,7 +43,9 @@ public class SQLGameDAO implements GameDAO {
     @Override
     public GameData getGame(int gameID) throws DataAccessException {
         try (var connection = DatabaseManager.getConnection()) {
-            try (var preparedStatement = connection.prepareStatement("SELECT gameID, whiteUsername, blackUsername, gameName, game FROM game WHERE gameID = ?")) {
+            try (var preparedStatement = connection.prepareStatement
+                    ("SELECT gameID, whiteUsername, blackUsername," +
+                            " gameName, game FROM game WHERE gameID = ?")) {
                 preparedStatement.setInt(1, gameID);
                 try (var resultSet = preparedStatement.executeQuery()) {
                     if (resultSet.next()) {
@@ -64,7 +68,8 @@ public class SQLGameDAO implements GameDAO {
     public Collection<GameData> listGames() throws DataAccessException {
         Collection<GameData> gameList = new ArrayList<>();
         try (var connection = DatabaseManager.getConnection()) {
-            try (var preparedStatement = connection.prepareStatement("SELECT gameID, whiteUsername, blackUsername, gameName, game FROM game")) {
+            try (var preparedStatement = connection.prepareStatement
+                    ("SELECT gameID, whiteUsername, blackUsername, gameName, game FROM game")) {
                 try (var resultSet = preparedStatement.executeQuery()) {
                     while (resultSet.next()) {
                         gameList.add(new GameData(
@@ -86,7 +91,9 @@ public class SQLGameDAO implements GameDAO {
     public void updateGame(GameData updatedGameData) throws DataAccessException {
         String json = new Gson().toJson(updatedGameData.game());
         try (var connection = DatabaseManager.getConnection()) {
-            try (var preparedStatement = connection.prepareStatement("UPDATE game SET whiteUsername = ?, blackUsername = ?, gameName = ?, game = ? WHERE gameID = ?")) {
+            try (var preparedStatement = connection.prepareStatement
+                    ("UPDATE game SET whiteUsername = ?, blackUsername = ?," +
+                            " gameName = ?, game = ? WHERE gameID = ?")) {
                 preparedStatement.setString(1, updatedGameData.whiteUsername());
                 preparedStatement.setString(2, updatedGameData.blackUsername());
                 preparedStatement.setString(3, updatedGameData.gameName());

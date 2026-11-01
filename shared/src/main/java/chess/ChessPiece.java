@@ -130,7 +130,8 @@ public class ChessPiece {
                 if (rowInFront <= 8 && rowInFront >= 1) {
                     forwardPiece = board.getPiece(new ChessPosition(rowInFront, currentCol));
                     if (forwardPiece == null) {
-                        boolean promotion = (rowInFront == 8 && this.getTeamColor() == ChessGame.TeamColor.WHITE) || (rowInFront == 1 && this.getTeamColor() == ChessGame.TeamColor.BLACK);
+                        boolean promotion = (rowInFront == 8 && this.getTeamColor() == ChessGame.TeamColor.WHITE)
+                                || (rowInFront == 1 && this.getTeamColor() == ChessGame.TeamColor.BLACK);
                         if (promotion) {
                             validMoves.add(new ChessMove(myPosition, new ChessPosition(rowInFront, currentCol), PieceType.QUEEN));
                             validMoves.add(new ChessMove(myPosition, new ChessPosition(rowInFront, currentCol), PieceType.KNIGHT));
@@ -143,7 +144,8 @@ public class ChessPiece {
                     }
                 }
                 // first turn
-                boolean firstMove = (currentRow == 2 && this.getTeamColor() == ChessGame.TeamColor.WHITE) || (currentRow == 7 && this.getTeamColor() == ChessGame.TeamColor.BLACK);
+                boolean firstMove = (currentRow == 2 && this.getTeamColor() == ChessGame.TeamColor.WHITE) ||
+                        (currentRow == 7 && this.getTeamColor() == ChessGame.TeamColor.BLACK);
                 if(firstMove && forwardPiece == null){
                     int twoAhead = currentRow + (move * 2);
                     ChessPiece twoAheadPiece = board.getPiece(new ChessPosition(twoAhead, currentCol));
@@ -156,7 +158,8 @@ public class ChessPiece {
                 if (rowInFront <= 8 && colOnRight <= 8 && rowInFront >= 1 && colOnRight >= 1) {
                     ChessPiece forwardRightPiece = board.getPiece(new ChessPosition(rowInFront, colOnRight));
                     if (forwardRightPiece != null && !forwardRightPiece.getTeamColor().equals(this.getTeamColor())) {
-                        boolean promotion = (rowInFront == 8 && this.getTeamColor() == ChessGame.TeamColor.WHITE) || (rowInFront == 1 && this.getTeamColor() == ChessGame.TeamColor.BLACK);
+                        boolean promotion = (rowInFront == 8 && this.getTeamColor() == ChessGame.TeamColor.WHITE) ||
+                                (rowInFront == 1 && this.getTeamColor() == ChessGame.TeamColor.BLACK);
                         if (promotion) {
                             validMoves.add(new ChessMove(myPosition, new ChessPosition(rowInFront, colOnRight), PieceType.QUEEN));
                             validMoves.add(new ChessMove(myPosition, new ChessPosition(rowInFront, colOnRight), PieceType.KNIGHT));
@@ -172,7 +175,8 @@ public class ChessPiece {
                 if (rowInFront <= 8 && colOnLeft <= 8 && rowInFront >= 1 && colOnLeft >= 1) {
                     ChessPiece forwardLeftPiece = board.getPiece(new ChessPosition(rowInFront, colOnLeft));
                     if (forwardLeftPiece != null && !forwardLeftPiece.getTeamColor().equals(this.getTeamColor())) {
-                        boolean promotion = (rowInFront == 8 && this.getTeamColor() == ChessGame.TeamColor.WHITE) || (rowInFront == 1 && this.getTeamColor() == ChessGame.TeamColor.BLACK);
+                        boolean promotion = (rowInFront == 8 && this.getTeamColor() == ChessGame.TeamColor.WHITE) ||
+                                (rowInFront == 1 && this.getTeamColor() == ChessGame.TeamColor.BLACK);
                         if (promotion) {
                             validMoves.add(new ChessMove(myPosition, new ChessPosition(rowInFront, colOnLeft), PieceType.QUEEN));
                             validMoves.add(new ChessMove(myPosition, new ChessPosition(rowInFront, colOnLeft), PieceType.KNIGHT));
