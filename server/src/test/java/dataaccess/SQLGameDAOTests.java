@@ -1,6 +1,9 @@
 package dataaccess;
 
 import chess.ChessGame;
+import chess.ChessMove;
+import chess.ChessPosition;
+import chess.InvalidMoveException;
 import com.google.gson.Gson;
 import dataaccess.sql.DatabaseSetup;
 import dataaccess.sql.SQLGameDAO;
@@ -72,6 +75,33 @@ public class SQLGameDAOTests {
     public void listGamesNegative() throws DataAccessException{
         Collection<GameData> games = gameDAO.listGames();
         Assertions.assertTrue(games.isEmpty());
+    }
+
+    @Test
+    public void updateGameAddedPlayer() throws DataAccessException{
+        GameData game = new GameData(0, "", "", "theGame", new ChessGame());
+        int id = gameDAO.createGameData(game);
+        GameData newGame = new GameData(id, "bob", "", "theGame", new ChessGame());
+        gameDAO.updateGame(new GameData(id, newGame.whiteUsername(), game.blackUsername(), game.gameName() ,game.game()));
+        GameData updatedGame = gameDAO.getGame(id);
+        Assertions.assertEquals(updatedGame.whiteUsername(), newGame.whiteUsername());
+    }
+
+    @Test
+    public void updateGameMovesPersist() throws InvalidMoveException,DataAccessException{
+        GameData game = new GameData(0, "bob", "joe", "theGame", new ChessGame());
+        int id = gameDAO.createGameData(game);
+        game.game().makeMove(new ChessMove(new ChessPosition(2, 5), new ChessPosition(4, 5), null));
+        gameDAO.updateGame(new GameData(id, "bob", "joe", "theGame", game.game()));
+        GameData updatedGame = gameDAO.getGame(id);
+        Assertions.assertEquals(game.game().getBoard(), updatedGame.game().getBoard());
+        Assertions.assertEquals(ChessGame.TeamColor.BLACK, updatedGame.game().getTeamTurn());
+    }
+
+    @Test
+    public void updateGameNotFound() throws DataAccessException{
+        GameData game = new GameData(9999, "bob", "joe", "theGame", new ChessGame());
+        Assertions.assertThrows(DataAccessException.class, () -> gameDAO.updateGame(new GameData(game.gameID(), "","","",new ChessGame())));
     }
 
 
