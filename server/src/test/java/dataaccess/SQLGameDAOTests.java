@@ -7,6 +7,8 @@ import dataaccess.sql.SQLGameDAO;
 import model.GameData;
 import org.junit.jupiter.api.*;
 
+import java.util.Collection;
+
 public class SQLGameDAOTests {
     private GameDAO gameDAO;
 
@@ -54,6 +56,22 @@ public class SQLGameDAOTests {
     @Test
     public void getGameGameNotFound() throws DataAccessException{
         Assertions.assertNull(gameDAO.getGame(8989));
+    }
+
+    @Test
+    public void listGamesPositive() throws DataAccessException{
+        GameData game = new GameData(0, "", "", "theGame", new ChessGame());
+        int id = gameDAO.createGameData(game);
+        GameData game2 = new GameData(0, "", "", "theGame2", new ChessGame());
+        int id2 = gameDAO.createGameData(game2);
+        Collection<GameData> games = gameDAO.listGames();
+        Assertions.assertEquals(2, games.size());
+    }
+
+    @Test
+    public void listGamesNegative() throws DataAccessException{
+        Collection<GameData> games = gameDAO.listGames();
+        Assertions.assertTrue(games.isEmpty());
     }
 
 
