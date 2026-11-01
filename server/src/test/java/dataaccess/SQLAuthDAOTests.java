@@ -18,8 +18,8 @@ public class SQLAuthDAOTests {
     public void createAuthPositive() throws DataAccessException {
         AuthData auth = new AuthData("123","bob");
         authDAO.createAuth(auth);
-        AuthData recievecAuth = authDAO.getAuth("123");
-        Assertions.assertEquals(auth, recievecAuth);
+        AuthData receivedAuth = authDAO.getAuth("123");
+        Assertions.assertEquals(auth, receivedAuth);
     }
 
     @Test
