@@ -16,6 +16,10 @@ public class ServerFacadeTests {
         System.out.println("Started test HTTP server on " + port);
         facade = new ServerFacade(port);
     }
+    @BeforeEach
+    public void setup() throws ResponseExeption{
+        facade.clear();
+    }
 
     @AfterAll
     static void stopServer() {
