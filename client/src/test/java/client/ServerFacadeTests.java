@@ -70,6 +70,19 @@ public class ServerFacadeTests {
                 facade.login("jim", "banana"));
     }
 
+    @Test
+    public void logoutPositive() throws ResponseException{
+        facade.register("bob", "banana", "monkeybob@gmail.com");
+        AuthData auth = facade.login("bob", "banana");
+        Assertions.assertDoesNotThrow(() -> facade.logout(auth.authToken()));
+    }
+
+    @Test
+    public void logoutBadToken() throws ResponseException{
+        Assertions.assertThrows(ResponseException.class, () ->
+                facade.logout("badToken"));
+    }
+
 
 
 }

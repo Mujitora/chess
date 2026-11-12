@@ -53,7 +53,7 @@ public class ServerFacade {
             }
             return new Gson().fromJson(response.body(), AuthData.class);
         } catch(IOException | InterruptedException e) {
-            throw new ResponseException("Could not reach the server");
+            throw new ResponseException("Unable to reach server");
         }
    }
 
@@ -73,9 +73,30 @@ public class ServerFacade {
            }
            return new Gson().fromJson(response.body(), AuthData.class);
        } catch (IOException | InterruptedException e){
-           throw new ResponseException("Could not reach the server");
+           throw new ResponseException("Unable to reach server");
        }
    }
+
+
+   public void logout(String authToken) throws ResponseException{
+       HttpRequest request = HttpRequest.newBuilder()
+               .uri(URI.create(serverURL + "/session")).header("authorization",authToken)
+               .DELETE().header("authorization", authToken)
+               .build();
+        try{
+            HttpResponse<String>response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            if(response.statusCode() == 401){
+                throw new ResponseException("Unauthorized");
+            }
+            if(response.statusCode() != 200){
+                throw new ResponseException("Unable to logout");
+            }
+        } catch (IOException | InterruptedException e){
+            throw new ResponseException("Unable to reach server");
+        }
+   }
+
+
 
 
 
