@@ -2,6 +2,7 @@ package client;
 
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import model.AuthData;
 import model.UserData;
 
@@ -94,6 +95,32 @@ public class ServerFacade {
         } catch (IOException | InterruptedException e){
             throw new ResponseException("Unable to reach server");
         }
+   }
+
+
+   public int createGame(String authToken, String gameName) throws ResponseException{
+       String json = new Gson().toJson(Map.of("gameName", gameName));
+       HttpRequest request = HttpRequest.newBuilder()
+               .uri(URI.create(serverURL + "/game"))
+               .header("authorization",authToken)
+               .POST(HttpRequest.BodyPublishers.ofString(json))
+               .build();
+       try{
+           HttpResponse<String>response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+           if(response.statusCode() == 401){
+               throw new ResponseException("You are not logged in");
+           }
+           if(response.statusCode() == 400){
+               throw new ResponseException("Please enter a valid game name");
+           }
+           if(response.statusCode() != 200){
+               throw new ResponseException("Unable to create game");
+           }
+           return new Gson().fromJson(response.body(), JsonObject.class).get("gameID").getAsInt();
+       } catch (IOException | InterruptedException e){
+           throw new ResponseException("Unable to reach server");
+       }
+
    }
 
 

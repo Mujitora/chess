@@ -83,6 +83,18 @@ public class ServerFacadeTests {
                 facade.logout("badToken"));
     }
 
+    @Test
+    public void createGamePositive() throws ResponseException{
+        AuthData auth = facade.register("bob", "banana", "bob@banana.com");
+        int gameID = facade.createGame(auth.authToken(), "bob's game");
+        Assertions.assertNotEquals(0, gameID);
+    }
+
+    @Test
+    public void createGameBadToken(){
+        Assertions.assertThrows(ResponseException.class, () ->
+                facade.createGame("badToken", "bob game"));
+    }
 
 
 }
