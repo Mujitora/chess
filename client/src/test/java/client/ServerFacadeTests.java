@@ -50,6 +50,26 @@ public class ServerFacadeTests {
                 facade.register("bob", "monkey", "bobmonkey@gmail.com"));
     }
 
+    @Test
+    public void loginPositive() throws ResponseException{
+        facade.register("bob", "banana", "monkeybob@gmail.com");
+        AuthData auth = facade.login("bob", "banana");
+        Assertions.assertEquals("bob", auth.username());
+    }
+
+    @Test
+    public void loginWrongPassword() throws ResponseException{
+        facade.register("bob", "banana", "monkeybob@gmail.com");
+        Assertions.assertThrows(ResponseException.class, () ->
+                facade.login("bob", "notbanana"));
+    }
+
+    @Test
+    public void loginNoUser(){
+        Assertions.assertThrows(ResponseException.class, () ->
+                facade.login("jim", "banana"));
+    }
+
 
 
 }
