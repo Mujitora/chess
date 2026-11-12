@@ -144,6 +144,32 @@ public class ServerFacade {
        }
    }
 
+   public void joinGame(String authToken, String playerColor, int gameID) throws ResponseException{
+       String json = new Gson().toJson(Map.of("playerColor", playerColor, "gameID", gameID));
+       HttpRequest request = HttpRequest.newBuilder()
+               .uri(URI.create(serverURL + "/game"))
+               .header("authorization", authToken)
+               .PUT(HttpRequest.BodyPublishers.ofString(json))
+               .build();
+       try{
+           HttpResponse<String>response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+           if(response.statusCode() == 401){
+               throw new ResponseException("You are not logged in");
+           }
+           if(response.statusCode() == 403){
+               throw new ResponseException("That color is already taken");
+           }
+           if(response.statusCode() == 400){
+               throw new ResponseException("Please type in a valid game and color. Color must be in all caps");
+           }
+           if(response.statusCode() != 200){
+               throw new ResponseException("Unable to list games");
+           }
+       } catch (IOException | InterruptedException e){
+           throw new ResponseException("Unable to reach server");
+       }
+   }
+
 
 
 

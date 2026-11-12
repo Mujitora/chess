@@ -118,6 +118,31 @@ public class ServerFacadeTests {
                 facade.listGames("not a valid token"));
     }
 
+    @Test
+    public void joinGamePositive()  throws ResponseException{
+        AuthData auth = facade.register("bob", "banana", "monkeybob@gmail.com");
+        int gameID = facade.createGame(auth.authToken(), "bobs game");
+        facade.joinGame(auth.authToken(), "WHITE", gameID);
+        GameData[] games = facade.listGames(auth.authToken());
+        Assertions.assertEquals("bob", games[0].whiteUsername());
+    }
+
+    @Test
+    public void joinGameColorTaken() throws ResponseException{
+        AuthData auth = facade.register("bob", "banana", "monkeybob@gmail.com");
+        AuthData auth2 = facade.register("joe", "notbanana", "monkeyjoe@gmail.com");
+        int gameID = facade.createGame(auth.authToken(), "bobs game");
+        facade.joinGame(auth.authToken(), "WHITE", gameID);
+        Assertions.assertThrows(ResponseException.class, () ->
+                facade.joinGame(auth2.authToken(), "WHITE", gameID));
+    }
+
+    @Test
+    public void joinGameBadToken() throws ResponseException{
+        Assertions.assertThrows(ResponseException.class, () ->
+                facade.joinGame("badTOken", "BLACK", 67));
+    }
+
 
 
 }
