@@ -1,6 +1,7 @@
 package client;
 
 import model.AuthData;
+import model.GameData;
 import org.junit.jupiter.api.*;
 import server.Server;
 
@@ -95,6 +96,28 @@ public class ServerFacadeTests {
         Assertions.assertThrows(ResponseException.class, () ->
                 facade.createGame("badToken", "bob game"));
     }
+
+    @Test
+    public void listGamesPositive() throws ResponseException{
+        AuthData auth = facade.register("bob", "banana", "monkeybob@gmail.com");
+        facade.createGame(auth.authToken(), "bobs game");
+        facade.createGame(auth.authToken(), "joes game");
+        GameData[] games = facade.listGames(auth.authToken());
+        Assertions.assertEquals(2, games.length);
+    }
+
+    @Test
+    public void listGamesEmpty() throws ResponseException{
+        AuthData auth = facade.register("bob", "banana", "monkeybob@gmail.com");
+        Assertions.assertEquals(0, facade.listGames(auth.authToken()).length);
+    }
+
+    @Test
+    public void listGamesBadToken() throws ResponseException{
+        Assertions.assertThrows(ResponseException.class, () ->
+                facade.listGames("not a valid token"));
+    }
+
 
 
 }

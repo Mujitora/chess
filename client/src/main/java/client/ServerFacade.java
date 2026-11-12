@@ -4,6 +4,7 @@ package client;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import model.AuthData;
+import model.GameData;
 import model.UserData;
 
 import java.io.IOException;
@@ -120,8 +121,30 @@ public class ServerFacade {
        } catch (IOException | InterruptedException e){
            throw new ResponseException("Unable to reach server");
        }
-
    }
+
+   public GameData[] listGames(String authToken) throws ResponseException{
+       HttpRequest request = HttpRequest.newBuilder()
+               .uri(URI.create(serverURL + "/game"))
+               .header("authorization", authToken)
+               .GET()
+               .build();
+       try {
+           HttpResponse<String>response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+           if(response.statusCode() == 401){
+               throw new ResponseException("You are not logged in");
+           }
+           if(response.statusCode() != 200){
+               throw new ResponseException("Unable to list games");
+           }
+           JsonObject root = new Gson().fromJson(response.body(), JsonObject.class);
+           return new Gson().fromJson(root.get("games"), GameData[].class);
+       } catch (IOException | InterruptedException e){
+           throw new ResponseException("Unable to reach server");
+       }
+   }
+
+
 
 
 
