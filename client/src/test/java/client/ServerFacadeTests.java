@@ -52,6 +52,12 @@ public class ServerFacadeTests {
     }
 
     @Test
+    public void registerBlankName() throws ResponseException{
+        Assertions.assertThrows(ResponseException.class, () ->
+                facade.register("", "monkey", "bobmonkey@gmail.com"));
+    }
+
+    @Test
     public void loginPositive() throws ResponseException{
         facade.register("bob", "banana", "monkeybob@gmail.com");
         AuthData auth = facade.login("bob", "banana");
@@ -95,6 +101,12 @@ public class ServerFacadeTests {
     public void createGameBadToken(){
         Assertions.assertThrows(ResponseException.class, () ->
                 facade.createGame("badToken", "bob game"));
+    }
+    @Test
+    public void createGameNoName() throws ResponseException{
+        AuthData auth = facade.register("bob", "banana", "bob@banana.com");
+        Assertions.assertThrows(ResponseException.class, () ->
+                facade.createGame(auth.authToken(), ""));
     }
 
     @Test
@@ -141,6 +153,12 @@ public class ServerFacadeTests {
     public void joinGameBadToken() throws ResponseException{
         Assertions.assertThrows(ResponseException.class, () ->
                 facade.joinGame("badTOken", "BLACK", 67));
+    }
+    @Test
+    public void joinGameDoesntExist() throws ResponseException{
+        AuthData auth = facade.register("bob", "banana", "monkeybob@gmail.com");
+        Assertions.assertThrows(ResponseException.class, () ->
+                facade.joinGame(auth.authToken(), "BLACK", 6767 ));
     }
 
 
