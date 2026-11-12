@@ -1,5 +1,6 @@
 package client;
 
+import model.AuthData;
 import org.junit.jupiter.api.*;
 import server.Server;
 
@@ -17,7 +18,7 @@ public class ServerFacadeTests {
         facade = new ServerFacade(port);
     }
     @BeforeEach
-    public void setup() throws ResponseExeption{
+    public void setup() throws ResponseException {
         facade.clear();
     }
 
@@ -31,5 +32,24 @@ public class ServerFacadeTests {
     public void sampleTest() {
         Assertions.assertTrue(true);
     }
+
+
+
+    @Test
+    public void registerPositive() throws ResponseException{
+        AuthData auth = facade.register("bob", "monkey", "bobmonkey@gmail.com");
+        Assertions.assertEquals("bob", auth.username());
+        Assertions.assertNotNull(auth.authToken());
+        Assertions.assertFalse(auth.authToken().isEmpty());
+    }
+
+    @Test
+    public void registerAlreadyTakenUsername() throws ResponseException{
+        facade.register("bob", "monkey", "bobmonkey@gmail.com");
+        Assertions.assertThrows(ResponseException.class, () ->
+                facade.register("bob", "monkey", "bobmonkey@gmail.com"));
+    }
+
+
 
 }
