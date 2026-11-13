@@ -27,17 +27,24 @@ public class Repl {
     }
     private String answer(String line) {
         String[] words = line.trim().split("\\s+");
+        if (authToken == null){
+            return preloginCommand(words);
+        }
+        return loggedInCommand(words);
+
+
+    }
+
+    private String preloginCommand(String[] words){
         String splitLine = words[0].toLowerCase();
         switch (splitLine) {
             case "quit":
-                running = false;
-                return("Thanks For Playing!");
-
+                return quit();
             case "help":
-                return help();
+                return helpLoggedOut();
 
             case "register":
-               return register(words);
+                return register(words);
 
             case "login":
                 return login(words);
@@ -48,10 +55,37 @@ public class Repl {
         }
     }
 
-    private String help(){
+    private String loggedInCommand(String[] words){
+        String splitLine = words[0].toLowerCase();
+
+        switch (splitLine){
+            case "quit":
+                return quit();
+            case "help":
+                return helpLoggedIn();
+            case "logout":
+                return logout(words);
+            default:
+                return("Please type one of the set commands or 'help' to view command options");
+        }
+    }
+
+    private String quit(){
+        running = false;
+        return("Thanks For Playing!");
+    }
+
+    private String helpLoggedOut(){
         return """
                 register [USERNAME] [PASSWORD] [EMAIL] - to create an account
                 login [USERNAME] [PASSWORD] - to login 
+                quit - to end the program
+                help - see list of commands
+                """;
+    }
+    private String helpLoggedIn(){
+        return """
+                logout - to logout
                 quit - to end the program
                 help - see list of commands
                 """;
@@ -76,6 +110,18 @@ public class Repl {
         AuthData auth = facade.login(words[1], words[2]);
         authToken = auth.authToken();
             return( auth.username() + " successfully logged in!");
+        } catch (ResponseException e){
+            return e.getMessage();
+        }
+    }
+
+    private String logout(String[] words){
+        if (words.length != 1){
+            return("Logout doesn't need any words after it");
+        } try {
+            facade.logout(authToken);
+            authToken = null;
+            return("successfully logged out!");
         } catch (ResponseException e){
             return e.getMessage();
         }
