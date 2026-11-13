@@ -39,6 +39,9 @@ public class Repl {
             case "register":
                return register(words);
 
+            case "login":
+                return login(words);
+
             default:
                 return("Please type one of the set commands or 'help' to view command options");
 
@@ -56,7 +59,7 @@ public class Repl {
 
     private String register(String[] words){
         if (words.length != 4){
-            return("Please provide the correct number of arguments. Type help for more assistance");
+            return("Please provide the correct number of words. Type help for more assistance");
         } try {
             AuthData auth = facade.register(words[1], words[2], words[3]);
             authToken = auth.authToken();
@@ -65,6 +68,21 @@ public class Repl {
             return e.getMessage();
         }
     }
+
+    private String login(String[] words){
+        if (words.length != 3){
+            return("Please provide the correct number of words. Type help for more assistance");
+    } try{
+        AuthData auth = facade.login(words[1], words[2]);
+        authToken = auth.authToken();
+            return( auth.username() + " successfully logged in!");
+        } catch (ResponseException e){
+            return e.getMessage();
+        }
+    }
+
+
+
     }
 
 
