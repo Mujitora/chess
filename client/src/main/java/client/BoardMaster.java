@@ -16,14 +16,17 @@ public class BoardMaster {
 
     public String createBoard(ChessBoard board, boolean white){
         StringBuilder result = new StringBuilder();
+        result.append(columnAndRows(white));
         for(int i = 0; i < 8; i++){
             int row = white ? 8 - i : 1 + i;
+            result.append(" ").append(row).append(" ");
             for(int j = 0; j < 8; j++) {
                     int col = white ? 1+j : 8-j;
-                    result.append(squares(board, row, col)).append(" ");
+                    result.append(squares(board, row, col));
             }
-            result.append("\n");
+            result.append(" ").append(row).append(" ").append("\n");
         }
+        result.append(columnAndRows(white));
         return result.toString();
     }
 
@@ -48,7 +51,6 @@ public class BoardMaster {
         }
         return color + pieceColor +letterForPiece(piece)
                 + EscapeSequences.RESET_TEXT_COLOR +EscapeSequences.RESET_BG_COLOR;
-
     }
 
     private String letterForPiece(ChessPiece piece){
@@ -66,6 +68,16 @@ public class BoardMaster {
             default:
                 return " P ";
         }
+    }
+
+    private String columnAndRows(boolean white){
+        StringBuilder labels = new StringBuilder("   ");
+        for(int j = 0; j < 8; j++) {
+            int col = white ? 1+j : 8-j;
+            char letter = (char) ('a' + col - 1);
+            labels.append(" ").append(letter).append(" ");
+        }
+        return labels.append("\n").toString();
     }
 
 
