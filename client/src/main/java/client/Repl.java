@@ -1,6 +1,7 @@
 package client;
 
 import model.AuthData;
+import model.GameData;
 
 import java.util.Scanner;
 
@@ -8,6 +9,7 @@ public class Repl {
     private ServerFacade facade;
     private boolean running = true;
     private String authToken;
+    private GameData[] games = new GameData[0];
 
     public Repl(int port){
         facade = new ServerFacade(port);
@@ -67,6 +69,8 @@ public class Repl {
                 return logout(words);
             case "create":
                 return create(words);
+            case "list":
+                return list(words);
             default:
                 return("Please type one of the set commands or 'help' to view command options");
         }
@@ -91,6 +95,7 @@ public class Repl {
                 quit - to end the program
                 help - see list of commands
                 create [GAMENAME] - to create a game
+                list - list all active games
                 """;
     }
 
@@ -139,6 +144,34 @@ public class Repl {
         } catch (ResponseException e){
             return e.getMessage();
         }
+    }
+
+    private String list(String[] words){
+        try {
+            games = facade.listGames(authToken);
+            if (games.length == 0){
+                return("There aren't any games yet");
+            }
+            StringBuilder text = new StringBuilder();
+            for( int i = 0 ; i < games.length; i++){
+                GameData game = games[i];
+                text.append(i+1).append(".")
+                        .append(game.gameName())
+                        .append(" - White: ").append(playerName(game.whiteUsername()))
+                        .append(",  Black: ").append(playerName(game.blackUsername()))
+                        .append("\n");
+            }
+            return text.toString();
+        } catch (ResponseException e){
+            return e.getMessage();
+        }
+    }
+
+    private String playerName(String username){
+        if(username == null) {
+            return "no player";
+        }
+        return username;
     }
 
 
