@@ -65,6 +65,8 @@ public class Repl {
                 return helpLoggedIn();
             case "logout":
                 return logout(words);
+            case "create":
+                return create(words);
             default:
                 return("Please type one of the set commands or 'help' to view command options");
         }
@@ -88,6 +90,7 @@ public class Repl {
                 logout - to logout
                 quit - to end the program
                 help - see list of commands
+                create [GAMENAME] - to create a game
                 """;
     }
 
@@ -122,6 +125,17 @@ public class Repl {
             facade.logout(authToken);
             authToken = null;
             return("successfully logged out!");
+        } catch (ResponseException e){
+            return e.getMessage();
+        }
+    }
+
+    private String create(String[] words){
+        if (words.length != 2){
+            return("Please provide the correct number of words. game name cannot contain any spaces");
+        } try {
+            int gameID = facade.createGame(authToken, words[1]);
+            return("Game created!");
         } catch (ResponseException e){
             return e.getMessage();
         }
